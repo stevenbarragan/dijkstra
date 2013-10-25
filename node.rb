@@ -27,7 +27,7 @@ end
 class Universe
   attr_accessor :current
 
-  def initialize(current)
+  def initialize(current, unvisited)
     @current = current
     @visited = current.paths
   end

@@ -1,4 +1,5 @@
-require './node'
+require_relative './graph_example.rb'
+require 'pry'
 
 # Assign to every node a tentative distance value: set it to zero for our initial
 #   node and to infinity for all other nodes.
@@ -16,6 +17,11 @@ require './node'
 # If the destination node has been marked visited (when planning a route between two specific nodes) or if the smallest tentative distance among
 #   the nodes in the unvisited set is infinity (when planning a complete traversal), then stop. The algorithm has finished.
 # Select the unvisited node that is marked with the smallest tentative distance, and set it as the new "current node" then go back to step 3.
+#
+#
+#
+
+binding.pry
 
 describe Node do
   context 'initial values' do
@@ -52,9 +58,9 @@ end
 
 describe Universe do
   context 'initial values' do
-    let(:paths){ [Node.new('B')]}
-    let(:current){ Node.new('A', paths) }
-    let(:subject){ Universe.new(current) }
+    let(:current){ one }
+    let(:unvisited){ [two,three,four,five,six] }
+    let(:subject){ Universe.new(current,unvisited) }
 
     it 'has a current node' do
       expect(subject.current).to be current
