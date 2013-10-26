@@ -1,37 +1,43 @@
 require './node'
 
-FOUR  = Node.new('4')
+module Sample
+  def self.load
+    four  = Node.new('4')
 
-FIVE  = Node.new('5', [Path.new(FOUR, 6)])
+    five  = Node.new('5', [Path.new(four, 6)])
 
-SIX   = Node.new('6', [Path.new(FIVE, 9)])
+    six   = Node.new('6', [Path.new(five, 9)])
 
-THREE = Node.new('3', [])
-THREE.add_path(SIX, 2)
-THREE.add_path(FOUR, 11)
+    three = Node.new('3', [])
+    three.add_path(six, 2)
+    three.add_path(four, 11)
 
-TWO   = Node.new('2', [])
-TWO.add_path(THREE,10)
-TWO.add_path(FOUR,15)
+    two   = Node.new('2', [])
+    two.add_path(three,10)
+    two.add_path(four,15)
 
-ONE  = Node.new('1', [])
-ONE.add_path(SIX, 14)
-ONE.add_path(TWO, 7)
-ONE.add_path(THREE, 9)
+    one  = Node.new('1', [])
+    one.add_path(six, 14)
+    one.add_path(two, 7)
+    one.add_path(three, 9)
 
-SIX.add_path(ONE, 14)
-SIX.add_path(THREE, 2)
+    six.add_path(one, 14)
+    six.add_path(three, 2)
 
-FOUR.add_path(FIVE, 6)
-FOUR.add_path(THREE, 11)
-FOUR.add_path(TWO, 15)
+    four.add_path(five, 6)
+    four.add_path(three, 11)
+    four.add_path(two, 15)
 
-FIVE.add_path(SIX, 9)
+    five.add_path(six, 9)
 
-SIX.add_path(THREE, 2)
-SIX.add_path(ONE, 14)
+    six.add_path(three, 2)
+    six.add_path(one, 14)
 
-THREE.add_path(ONE, 9)
-THREE.add_path(TWO, 10)
+    three.add_path(one, 9)
+    three.add_path(two, 10)
 
-TWO.add_path(ONE, 7)
+    two.add_path(one, 7)
+
+    [one,two,three,four,five,six]
+  end
+end

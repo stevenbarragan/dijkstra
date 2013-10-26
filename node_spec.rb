@@ -17,7 +17,7 @@ require 'pry'
 # If the destination node has been marked visited (when planning a route between two specific nodes) or if the smallest tentative distance among
 #   the nodes in the unvisited set is infinity (when planning a complete traversal), then stop. The algorithm has finished.
 # Select the unvisited node that is marked with the smallest tentative distance, and set it as the new "current node" then go back to step 3.
-
+#
 
 describe Node do
   context 'initial values' do
@@ -53,45 +53,59 @@ describe Path do
 end
 
 describe Universe do
-  context 'initial values' do
-    let(:current){ ONE }
-    let(:unvisited){ [TWO,THREE,FOUR,FIVE,SIX] }
-    let(:subject){ Universe.new(current,unvisited) }
-
-    it 'has a current node' do
-      expect(subject.current).to be current
-    end
-  end
-
   describe '#get_betther_way' do
-    let(:current){ ONE }
-    let(:unvisited){ [TWO,THREE,FOUR,FIVE,SIX] }
-    let(:subject){ Universe.new(current,unvisited) }
+    let(:subject){ Universe.new(@current,@unvisited) }
+
+    before do
+      nodes = Sample.load
+      @current = nodes.shift
+      @unvisited = nodes
+    end
 
     context 'between two close nodes' do
       it 'return the less cost way' do
-        expect(subject.get_better_way(ONE, FOUR).node.name).to be TWO.name
+        expect(subject.get_better_way(@current).node.name).to eq '2'
       end
     end
   end
 
   describe '#find' do
-    let(:current){ ONE }
-    let(:unvisited){ [TWO,THREE,FOUR,FIVE,SIX] }
+    let(:subject){ Universe.new(@current,@unvisited) }
 
     before :each do
-      @universe = Universe.new(current,unvisited)
+      nodes = Sample.load
+      @five = nodes[4]
+      @two  = nodes[1]
+      @six  = nodes[5]
+      @four = nodes[3]
+      @current = nodes.shift
+      @unvisited = nodes
     end
 
     context 'between two close nodes' do
       it 'return the less cost way' do
-        expect(@universe.find_way(TWO).last.name).to be TWO.name
+        expect(subject.find_way(@two).last.name).to eq '2'
       end
     end
 
     context 'between tree levels' do
       it 'return the less cost way between tree levels' do
-        expect(@universe.find_way(SIX)[1].name).to be TWO.name
+        path = subject.find_way(@six)
+        expect(path.map &:name).to eq ["1", "2", "3", "6"]
+      end
+    end
+
+    context 'between four levels' do
+      it 'return the less cost way between tree levels' do
+        path = subject.find_way(@five)
+        expect(path.map &:name).to eq ["1", "2", "3", "6", "5"]
+      end
+    end
+
+    context 'between four levels' do
+      it 'return the less cost way between tree levels' do
+        path = subject.find_way(@four)
+        expect(path.map &:name).to eq ["1", "2", "3", "6", "5", "4"]
       end
     end
   end

@@ -5,6 +5,7 @@ class Node
     @name = name
     @value = Float::INFINITY
     @paths = paths
+    @visited = false
   end
 
   def visited?
@@ -39,30 +40,26 @@ class Universe
     @current_value = 0
 
     @unvisited = current.paths
-    @way = [current]
+    @way = [@current]
   end
 
   def find_way(nodeB)
-    binding.pry
-
-    find(nodeB)
-    while @way.last != nodeB
+    while @way.last.name != nodeB.name
       find(nodeB)
     end
+
     @way
   end
 
   def find(nodeB)
-    @way << get_better_way(current,nodeB)
-    mark_visited(@way.last)
+    next_path = get_better_way(@current)
+    next_path.node.visited = true
+    @current_value = next_path.node.value = @current_value + next_path.value
+    @current = next_path.node
+    @way << @current
   end
 
-  def mark_visited(path)
-    path.node.visited = true
-    @current_value = path.node.value += @current_value
-  end
-
-  def get_better_way(nodeA,nodeB)
-    nodeA.paths.select{ |path| !path.node.visited? }.min_by{ |path| path.value }
+  def get_better_way(node)
+    node.paths.select{ |path| !path.node.visited? }.min_by{ |path| path.value }
   end
 end
